@@ -9,6 +9,7 @@
     }
 
    exports.checkNames= function (name){
+       const regex=/^[A-Za-z]+([\s]{0,1}|['-]{0,1})^$/
        return /^[a-zA-Z ]+$/.test(name);
     }
 
@@ -18,7 +19,17 @@
     }
 
     exports.checkAge=function (birthdate){
-        
+         
+        var now = new Date().getTime();
+        var birth=new Date(birthdate).getTime()
+        var Difference_In_Time = now - birth; 
+        var Difference_In_Days=Difference_In_Time/ (1000 * 3600 * 24); 
+        if(Difference_In_Days/365 > 13){
+            return true
+        } 
+        else{
+            return false;
+        }
     }
 
     
