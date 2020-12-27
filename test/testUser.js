@@ -3,7 +3,7 @@ const expect = chai.expect;
 const userValidator=require('../app/validator/validateUser')
 const todoListValidator=require('../app/validator/validateTodoList')
 
-/*describe("validator checkEmail()", () => {
+describe("validator checkEmail()", () => {
 	it("should return false ", ()=> {
 		expect(userValidator.checkEmail('jules')).to.be.false
     })
@@ -22,35 +22,35 @@ const todoListValidator=require('../app/validator/validateTodoList')
     it("should return false",()=>{
         expect(userValidator.checkEmail('jules31@.com.gmail.fr')).to.be.false
     })
-  });*/
+  })
 
-// describe("Validator checkNames()",()=>{
-//     it("should return true ", ()=> {
-// 		expect(userValidator.checkNames('al ain')).to.be.true
-//     })
-//     it("should return true ", ()=> {
-// 		expect(userValidator.checkNames('toto')).to.be.true
-//     })
-//     it("should return true ", ()=> {
-// 		expect(userValidator.checkNames('to-to')).to.be.true
-//     })
-//     it("should return false", ()=> {
-//       expect(userValidator.checkNames('jules31')).to.be.false
-//     })
-//     it("should return false ", ()=> {
-//       expect(userValidator.checkNames('-jules')).to.be.false
-//     })
-//     it("should return false ", ()=> {
-//       expect(userValidator.checkNames('guillaume@')).to.be.false
-//     })
-//     it("should return true ", ()=> {
-//       expect(userValidator.checkNames('/toto')).to.be.true
-//     }) 
+describe("Validator checkNames()",()=>{
+    it("should return true ", ()=> {
+		expect(userValidator.checkNames('al ain')).to.be.true
+    })
+    it("should return true ", ()=> {
+		expect(userValidator.checkNames('toto')).to.be.true
+    })
+    it("should return true ", ()=> {
+		expect(userValidator.checkNames('to-to')).to.be.true
+    })
+    it("should return false", ()=> {
+      expect(userValidator.checkNames('jules31')).to.be.false
+    })
+    it("should return false ", ()=> {
+      expect(userValidator.checkNames('-jules')).to.be.false
+    })
+    it("should return false ", ()=> {
+      expect(userValidator.checkNames('guillaume@')).to.be.false
+    })
+    it("should return false ", ()=> {
+      expect(userValidator.checkNames('/toto')).to.be.false
+    }) 
        
-// });
+})
 
 
-/*describe("Validator checkPassword",()=>{
+describe("Validator checkPassword",()=>{
 
   it("it should return false", ()=>{
     expect(userValidator.checkPassword('1234@')).to.be.false
@@ -74,7 +74,7 @@ const todoListValidator=require('../app/validator/validateTodoList')
     expect(userValidator.checkPassword('abcd31/$')).to.be.false
   })
   
-});*/
+})
 
 describe( "Validator age", () => {
 
@@ -86,40 +86,111 @@ describe( "Validator age", () => {
         expect(userValidator.checkAge('11-27-2000')).to.be.true
     })
 
-    it("it should return invalid date birth", ()=>{
-        expect(userValidator.checkAge('11-27-1899')).to.equal("invalid date birth")
-    })
 
     it("it should return true", ()=>{
         expect(userValidator.checkAge('11/27/2000')).to.be.true
     })
 
-    it("it should return The date of birth is not valid", ()=>{
-        expect(userValidator.checkAge('12-28-2020')).to.equal("The date of birth is not valid")
-    })
-
-    it("it should return invalid date birth", ()=>{
-        expect(userValidator.checkAge('franck')).to.equal("invalid date birth")
+    it("it should return false", ()=>{
+        expect(userValidator.checkAge('12/28/2020')).to.be.false
     })
 
 })
 
 
-/*describe("validator isValid()", () => {
+describe("validator isValid()", () => {
 
     it("should return true ", ()=> {
 
 	    let user = {
 
-            "lastName": "Guillaume",
-            "firstName": "WELLE",
-            "birthDate": "01/04/1993",
+            "lastName": "toto ali",
+            "firstName": "georges-li",
+            "birthDate": "11-27-2000",
             "email": "gwelle@myges.fr",
-            "password": "test123$",
+            "password": "Test123@",
         }
 		expect(userValidator.isValid(user)).to.be.true
     })
-})*/
+
+    it("should return an array that contain password not valid ", ()=> {
+
+	    let user = {
+
+            "lastName": "toto ali",
+            "firstName": "georges-li",
+            "birthDate": "11-27-2000",
+            "email": "gwelle@myges.fr",
+            "password": "Test1",
+        }
+		expect(userValidator.isValid(user)).to.be.an('array').that.includes('password not valid');
+    })
+
+    it("should return an array that contain birthDate not valid ", ()=> {
+
+	    let user = {
+
+            "lastName": "toto ali",
+            "firstName": "georges-li",
+            "birthDate": "11-27-2010",
+            "email": "gwelle@myges.fr",
+            "password": "Test1@kkjh",
+        }
+		expect(userValidator.isValid(user)).to.be.an('array').that.includes('birthDate not valid');
+    })
+
+    it("should return an array that contain email not valid ", ()=> {
+
+	    let user = {
+
+            "lastName": "toto ali",
+            "firstName": "georges-li",
+            "birthDate": "11-27-2000",
+            "email": "gwellemyges.fr",
+            "password": "Test1@kkjh",
+        }
+		expect(userValidator.isValid(user)).to.be.an('array').that.includes('email not valid');
+    })
+
+    it("should return an array that contain firstName not valid ", ()=> {
+
+	    let user = {
+
+            "lastName": "toto ali",
+            "firstName": "",
+            "birthDate": "11-27-2000",
+            "email": "gwelle@myges.fr",
+            "password": "Test1@kkjh",
+        }
+		expect(userValidator.isValid(user)).to.be.an('array').that.includes('firstName not valid');
+    })
+
+    it("should return an array that contain lastName not valid ", ()=> {
+
+	    let user = {
+
+            "lastName": "",
+            "firstName": "toto",
+            "birthDate": "11-27-2000",
+            "email": "gwelle@myges.fr",
+            "password": "Test1@kkjh",
+        }
+		expect(userValidator.isValid(user)).to.be.an('array').that.includes('lastName not valid');
+    })
+
+    it("should return an array that includes ['email not valid','lastName not valid','firstName not valid','birthDate not valid','password not valid']  ", ()=> {
+
+	    let user = {
+
+            "lastName": "",
+            "firstName": "tffs@sé5",
+            "birthDate": "11-27-2010",
+            "email": "gwellemyges.fr",
+            "password": "test1@kkjh",
+        }
+		expect(userValidator.isValid(user)).to.be.an('array').that.includes('email not valid','lastName not valid','firstName not valid','birthDate not valid','password not valid');
+    })
+})
 
 
 
