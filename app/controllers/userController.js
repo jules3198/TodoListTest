@@ -58,7 +58,7 @@ const UserController={
     updateUser:(req,res)=>{
         const newUser = new User(req.body);
 
-        User.findByIdAndUpdate({email:req.body.email},newUser,(err,result)=>{
+        User.updateOne({email:req.body.email},newUser,(err,result)=>{
             respond(err,result,res);
         })
     },

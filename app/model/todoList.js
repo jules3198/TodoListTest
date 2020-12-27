@@ -5,9 +5,10 @@ const Schema = mongoose.Schema;
 const TodoListSchema=new Schema({
     name:{type:String,require:true},
     user:{
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    items: [{type:Schema.Types.ObjectId, ref: 'Item'}]
 
 });
 
