@@ -1,5 +1,6 @@
 const TodoList=require('../model/todoList');
 const Item=require('../model/item');
+const emailService=require('../validator/emailService')
 
 function checkMinutes(d){
     let current = new Date().toISOString();
@@ -8,28 +9,34 @@ function checkMinutes(d){
     let diff=(d1-d2)/1000;
     diff /= 60;
     let response=Math.abs(Math.round(diff));
-    console.log("response",response)
-    return response>1?true:false;
+    return response>30?true:false;
 }
 
 function validateItemCreation(todolistname){
 
     return new Promise(async (resolve,reject)=>{
         const todoList=await TodoList.findOne({name:todolistname}).populate('items');
-        console.log("items ",todoList)
             let len=todoList.items.length;
             let date;
             let resp;
-            date=todoList.items[len-1].creationDate
+            if(len==0){
+                resolve(true)
+            }else{
+                date=todoList.items[len-1].creationDate
             if(len<=10 && checkMinutes(date)){
                 if(len==7){
-                console.log("send mail");
+                   let options={
+                    // call email Service
+                   }
+
                 }
                 resolve(true)
             }else{
                 reject(false)
-                throw "";
+                throw " can't create item";
             }
+            }
+            
     }) 
 }
 

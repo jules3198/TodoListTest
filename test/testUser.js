@@ -1,6 +1,7 @@
 const chai = require("chai");
 const expect = chai.expect;
-const userValidator=require('../app/validator/validateUser')
+const userValidator=require('../app/validator/validateUser');
+
 
 describe("validator checkEmail()", () => {
 	it("should return false ", ()=> {
