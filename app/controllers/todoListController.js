@@ -29,12 +29,14 @@ const TodoListController={
             respond(err,result,res);
         });
     },
-    createTodoList:async (req,res)=>{
+    createTodoList: async (req,res)=>{
        let name=req.body.name;
        let email=req.body.email;
-       if(await checkTodoList(email)){
+       let response = await checkTodoList.Result(email)
+       console.log("response ",response)
+       if(response==true){
         User.findOne({ email: email },(error,user)=>{
-            
+            id=user._id
             newTodoList=new TodoList({
                 name:name,
                 user:id

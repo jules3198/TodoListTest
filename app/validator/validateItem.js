@@ -9,27 +9,44 @@ function checkMinutes(d){
     diff /= 60;
     let response=Math.abs(Math.round(diff));
     console.log("response",response)
-    return response>=30?true:false;
+    return response>1?true:false;
 }
 
+function validateItemCreation(todolistname){
 
+    return new Promise(async (resolve,reject)=>{
+        const todoList=await TodoList.findOne({name:todolistname}).populate('items');
+        console.log("items ",todoList)
+            let len=todoList.items.length;
+            let date;
+            let resp;
+            date=todoList.items[len-1].creationDate
+            if(len<=10 && checkMinutes(date)){
+                if(len==7){
+                console.log("send mail");
+                }
+                resolve(true)
+            }else{
+                reject(false)
+                throw "";
+            }
+    }) 
+}
 
-async function validateItemCreation(todolistname){
-    const todoList= await TodoList.findOne({name:todolistname}).populate('items');
-    let len=todoList.items.length;
-    let date;
+async function result(todolistname){
+    console.log('before promise call');
     let resp;
-    date=todoList.items[len-1].creationDate
-    if(len<=10 && checkMinutes(date)){
-         resp=true
-         if(len==7){
-           console.log("envoie mail")
-         }
-    }else{
-        throw "can't add new item"
+    try{
+      resp =  await validateItemCreation(todolistname);
+    }catch(err){
+        resp=err;
     }
+    console.log('promise resolved: ' + resp)
+        console.log('next step')
     return resp;
 }
 
 
-module.exports=validateItemCreation
+exports.validateItemCreation =validateItemCreation
+exports.checkMinutes=checkMinutes
+exports.Result = result

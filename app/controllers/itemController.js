@@ -2,9 +2,6 @@ const Item=require('../model/item')
 const Todolist=require('../model/todoList');
 const ItemValidator=require('../validator/validateItem');
 
-
-
-
 function respond(err, result, res) { 
     if (err) return res.status(500).json({error: err});
     return res.json(result);
@@ -25,9 +22,9 @@ const ItemController={
         });
     },
 
-    createItem:(req,res)=>{
-
-    if(ItemValidator(req.body.todoListName)){
+    createItem: async (req,res)=>{
+     let response=await ItemValidator.Result(req.body.todoListName)
+    if( response==true){
         let current = new Date().toISOString();
         let newItem=new Item({
             name:req.body.name,
@@ -49,6 +46,8 @@ const ItemController={
                 });  
             }
         });
+    }else{
+        res.send("can't create item")
     }
        
     },
