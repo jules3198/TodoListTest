@@ -1,18 +1,21 @@
 var nodemailer = require('nodemailer');
 
-function sendMail(options){
-    
-let destinator=options["email"];
+async function sendMail(options){
+  
+return new Promise((resolve,reject)=>{
+  let destinator=options["email"];
 let subject=options["subject"];
 let text=options["text"];
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'virusbo001@gmail.com',
-    pass: 'virusvirus'
+    user: 'julestest31@gmail.com',
+    pass: '1234ABC@'
   }
 });
+
+
 
 var mailOptions = {
   from: 'virusbo001@gmail.com',
@@ -23,11 +26,14 @@ var mailOptions = {
 
 transporter.sendMail(mailOptions, function(error, info){
   if (error) {
-   return false;
+    console.log("error ",error)
+   reject(false);
   } else {
-   return true;
+    console.log("info ",info)
+   resolve(true);
   }
 });
+})
 }
 
 

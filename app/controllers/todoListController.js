@@ -9,7 +9,7 @@ const checkTodoList = require('../validator/validateTodoList');
 
 function respond(err, result, res) { 
     if (err) return res.status(500).json({error: err});
-    return res.json(result);
+    return res.status(200).json({status:"ok", statusCode:200});
 }
 
 

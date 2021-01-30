@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "app": "nodemon app.js",
-    "test": "mocha './test/testItem.js'"
+    "test": "mocha './test/testSendMail.js'"
   },
   "author": "",
   "license": "ISC",

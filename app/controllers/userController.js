@@ -1,12 +1,13 @@
 const User = require('../model/User')
 const mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
-var bcrypt=require('bcryptjs')
+var bcrypt=require('bcryptjs');
+const validateUser= require('../validator/validateUser')
 
 
 function respond(err, result, res) { 
     if (err) return res.status(500).json({error: err});
-    return res.json(result);
+    return res.status(200).json(result);
 }
 
 
@@ -32,7 +33,8 @@ const UserController={
             if (user) {
               return res.status(400).json({ email: "Email already exists" });
             } else {
-      
+              
+                
                 const newUser = new User({
                     lastName: req.body.lastName,
                     firstName: req.body.firstName,
@@ -40,18 +42,24 @@ const UserController={
                     email: req.body.email,
                     password: req.body.password
                 });
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
-                      if (err) throw err;
-                      newUser.password = hash;
-                      newUser
-                        .save((err,result)=>{
-                            respond(err,result,res)
-                        })
-                       
-                    });
-                });    
 
+                let validateResponse= validateUser.isValid(newUser);
+                if(validateResponse == true){
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                          if (err) throw err;
+                          newUser.password = hash;
+                          newUser
+                            .save((err,result)=>{
+                                respond(err,result,res)
+                            })
+                           
+                        });
+                    });   
+                }else{
+                    return res.status(400).json({ errors: validateResponse });
+                }
+                 
             }
         });      
     },

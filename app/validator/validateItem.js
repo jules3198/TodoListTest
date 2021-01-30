@@ -12,9 +12,10 @@ function checkMinutes(d){
     return response>30?true:false;
 }
 
-function validateItemCreation(todolistname){
+function validateItemCreation(todolistname,email){
 
     return new Promise(async (resolve,reject)=>{
+        
         const todoList=await TodoList.findOne({name:todolistname}).populate('items');
             let len=todoList.items.length;
             let date;
@@ -24,11 +25,14 @@ function validateItemCreation(todolistname){
             }else{
                 date=todoList.items[len-1].creationDate
             if(len<=10 && checkMinutes(date)){
-                if(len==7){
+                if(len>7){
                    let options={
-                    // call email Service
+                    "email": email,
+                    "subject": "Ajout Item",
+                    "text": "Vous ne pouvez ajouter que deux items "
                    }
-
+                    // call email Service
+                    emailService.sendMail(options);
                 }
                 resolve(true)
             }else{
@@ -40,11 +44,11 @@ function validateItemCreation(todolistname){
     }) 
 }
 
-async function result(todolistname){
+async function result(todolistname,email){
     console.log('before promise call');
     let resp;
     try{
-      resp =  await validateItemCreation(todolistname);
+      resp =  await validateItemCreation(todolistname,email);
     }catch(err){
         resp=err;
     }
