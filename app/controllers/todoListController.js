@@ -9,7 +9,7 @@ const checkTodoList = require('../validator/validateTodoList');
 
 function respond(err, result, res) { 
     if (err) return res.status(500).json({error: err});
-    return res.status(200).json({status:"ok", statusCode:200});
+    return res.status(200).json(result);
 }
 
 
@@ -42,7 +42,7 @@ const TodoListController={
                 user:id
             });
             newTodoList.save((err,result)=>{
-                 respond(err,result,res)
+                 respond(err,{status:"ok", statusCode:200},res)
             });
         })      
            

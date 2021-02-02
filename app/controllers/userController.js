@@ -10,6 +10,12 @@ function respond(err, result, res) {
     return res.status(200).json(result);
 }
 
+function generatePwd(password){
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    return hash;   
+}
+
 
 const UserController={
 
@@ -51,7 +57,7 @@ const UserController={
                           newUser.password = hash;
                           newUser
                             .save((err,result)=>{
-                                respond(err,result,res)
+                                respond(err,{status:"ok", statusCode:200},res)
                             })
                            
                         });
@@ -63,18 +69,46 @@ const UserController={
             }
         });      
     },
-    updateUser:(req,res)=>{
-        const newUser = new User(req.body);
-
-        User.updateOne({email:req.body.email},newUser,(err,result)=>{
-            respond(err,result,res);
-        })
+    updateUser:async (req,res)=>{
+        let email = req.params.email;
+       await User.findOne({email:email},async (err,user)=>{
+            if(user){
+                
+                let id=user._id;
+                const newUser = {
+                    lastName: req.body.lastName ? req.body.lastName : user.lastName,
+                    firstName: req.body.firstName ? req.body.firstName : user.firstName,
+                    birthDate:req.body.birthDate ? req.body.birthDate : user.birthDate,
+                    email: req.body.email ? req.body.email : user.email,
+                    password: req.body.password ? generatePwd(req.body.password) : user.password
+                };
+                User.findOneAndUpdate({_id:id},newUser,(err,resp)=>{
+                    if(err){
+                        return res.status(400).json({ error: "Can't update" });
+                    }else{
+                        respond(err,{status:"ok", statusCode:200},res);
+                    }
+                });
+            }else{
+                return res.status(400).json({ email: "Email not exist" });
+            }  
+        });
     },
-    deleteUser:(req,res)=>{
+    deleteUser:async (req,res)=>{
 
-        User.findOneAndRemove({email:req.body.email}, (err, result) => {
-             return respond(err, result, res);
-           });
+        await User.findOne({email:req.body.email},async (err,user)=>{
+            if(user){
+                User.findOneAndRemove({email:req.body.email}, (err, result) => {
+                    if(err){
+                        return res.status(400).json({ email: "Can't delete" });
+                    }else{
+                        return respond(err, {status:"ok", statusCode:200}, res);
+                    }
+                });
+            }else{
+                return res.status(400).json({ email: "Email not exist" });
+            }
+        });        
     }
 
 }
