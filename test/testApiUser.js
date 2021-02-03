@@ -1,0 +1,124 @@
+//apiTest.js
+const request = require('supertest');
+const app = require('../app');
+
+const chai = require("chai");
+const res = require("express");
+const expect = chai.expect;
+
+
+describe('GET /users', function () {
+    it('returns list of all users', function (done) {
+        request(app)
+            .get('/api/user/listUser')
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                console.log("result json object",res.body)
+                expect('Content-Type', /json/)
+                let result = res.body;
+                expect(result).to.be.an('array')
+                expect(res.statusCode).to.be.equal(200)
+                done();
+            });
+    });
+});
+
+describe('POST /addUser', function () {
+
+    let user = {
+
+        "lastName": "tatoti",
+        "firstName": "totita",
+        "birthDate": "01-04-1993",
+        "email": "ttr@tt.tr",
+        "password": "Test@1234",
+    }
+
+    it('create new user', function (done) {
+        request(app)
+            .post('/api/user/addUser')
+            .send(user)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+                console.log("result",res.body)
+                //let result = res.body;
+                //expect(result).to.be.an('array')
+                expect('Content-Type', /json/)
+                expect(res.statusCode).to.be.equal(200,"invalid status code")
+                //expect(201)
+                done();
+            });
+    });
+
+    it('not created new user', function (done) {
+        request(app)
+            .post('/api/user/addUser')
+            .send(user)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+                console.log("result",res.body)
+                //let result = res.body;
+                //expect(result).to.be.an('array')
+                expect('Content-Type', /json/)
+                expect(res.statusCode).to.be.equal(400,"user not created")
+                //expect(201)
+
+
+                done();
+            });
+    });
+
+    let data = {
+
+        "lastName": "Benji",
+        "firstName": "Belaja",
+        "birthDate": "01-04-1993",
+        "email": "benjiebelaja.fr",
+        "password": "Test@1234",
+    }
+
+    it('not created new user with e-mail invalid', function (done) {
+        request(app)
+            .post('/api/user/addUser')
+            .send(data)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+                console.log("data",res.body)
+                //let result = res.body;
+                //expect(result).to.be.an('array')
+                expect('Content-Type', /json/)
+                expect(res.statusCode).to.be.equal(400,"user not created, because email invalid")
+
+                done();
+            });
+    });
+
+    let creation = {
+
+        "lastName": "gayant",
+        "firstName": "Brice",
+        "birthDate": "01/04-2010",
+        "email": "gbe@b.fr",
+        "password": "Test@1234",
+    }
+
+    it('not created new user with birthday invalid', function (done) {
+        request(app)
+            .post('/api/user/addUser')
+            .send(creation)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+                console.log("data",res.body)
+                //let result = res.body;
+                //expect(result).to.be.an('array')
+                //expect('Content-Type', /json/)
+                expect(res.statusCode).to.be.equal(400,"user not created, because birthday invalid")
+
+                done();
+            });
+    });
+})
