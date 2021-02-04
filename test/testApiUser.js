@@ -22,7 +22,7 @@ describe('GET /users', function () {
             });
     });
 });
-
+/*
 describe('POST /addUser', function () {
 
     let user = {
@@ -30,7 +30,7 @@ describe('POST /addUser', function () {
         "lastName": "tatoti",
         "firstName": "totita",
         "birthDate": "01-04-1993",
-        "email": "ttr@tt.tr",
+        "email": "bbg@cluster.fr",
         "password": "Test@1234",
     }
 
@@ -42,10 +42,10 @@ describe('POST /addUser', function () {
             .end((err, res) => {
                 if (err) return done(err);
                 console.log("result",res.body)
-                //let result = res.body;
-                //expect(result).to.be.an('array')
+                let result = res.body;
+                expect(result.status).to.be.equal('ok')
                 expect('Content-Type', /json/)
-                expect(res.statusCode).to.be.equal(200,"invalid status code")
+                expect(res.statusCode).to.be.equal(200,"status code valid")
                 //expect(201)
                 done();
             });
@@ -122,3 +122,73 @@ describe('POST /addUser', function () {
             });
     });
 })
+*/
+describe('GET /getUserByMail', function () {
+    it('retrieve the current user according to his e-mail', function (done) {
+        request(app)
+            .get('/api/user/getUserByMail')
+            .send({
+                "email" : "benji.fr@ges.com"
+            })
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+                console.log("data",res.body)
+                let result = res.body;
+                expect(result).to.be.an('object',"this is an object")
+                expect('Content-Type', /json/)
+                expect(res.statusCode).to.be.equal(200,"Email user retrieve")
+
+                done();
+            });
+         });
+    });
+
+    let currentUser = {
+
+        "lastName": "BOURNE",
+        "firstName": "Evan",
+        "birthDate": "01-04-1992",
+        "email": "gwelle.civ@ges.fr",
+        "password": "Lucamos93$",
+    }
+
+    describe('PUT /updateUser', function () {
+        it('modify the current user according to his e-mail', function (done) {
+            request(app)
+                .put('/api/user/updateUser/gwelle.civ@ges.fr')
+                .send(currentUser)
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    if (err) return done(err);
+                    console.log("res",res.body)
+                    let result = res.body;
+                    expect(result.status).to.be.equal('ok',"this is ok response from the server")
+                    expect('Content-Type', /json/)
+                    expect(res.statusCode).to.be.equal(200,"user modified")
+
+                    done();
+                });
+        });
+});
+
+describe('delete /deleteUser', function () {
+    it('remove the current user according to his e-mail', function (done) {
+        request(app)
+            .delete('/api/user/deleteUser/guillaume.welle@gmail.com')
+            /*.send({
+                "email" : "guillaume@gmail.com"
+            })*/
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+                console.log("suppression",res.body)
+                let result = res.body;
+                expect(result.status).to.be.equal('ok',"this is ok response from the server")
+                expect('Content-Type', /json/)
+                expect(res.statusCode).to.be.equal(200,"user removed")
+
+                done();
+            });
+    });
+});

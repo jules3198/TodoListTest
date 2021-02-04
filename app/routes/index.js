@@ -9,7 +9,7 @@ module.exports = (app) => {
   app.route('/api/user/addUser').post(UserController.createUser);
   app.route('/api/user/getUserByMail').get(UserController.getUserByEmail);
   app.route('/api/user/updateUser/:email').put(UserController.updateUser);
-  app.route('/api/user/deleteUser').delete(UserController.deleteUser);
+  app.route('/api/user/deleteUser/:email').delete(UserController.deleteUser);
  
   // todolist routes
 

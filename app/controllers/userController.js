@@ -96,9 +96,9 @@ const UserController={
     },
     deleteUser:async (req,res)=>{
 
-        await User.findOne({email:req.body.email},async (err,user)=>{
+        await User.findOne({email:req.params.email},async (err,user)=>{
             if(user){
-                User.findOneAndRemove({email:req.body.email}, (err, result) => {
+                User.findOneAndRemove({email:req.params.email}, (err, result) => {
                     if(err){
                         return res.status(400).json({ email: "Can't delete" });
                     }else{
