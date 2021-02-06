@@ -16,9 +16,10 @@ module.exports = (app) => {
   
   app.route('/api/todolist/listTodoList').get(TodoListController.getAllTodoList);
   app.route('/api/todolist/addTodoList').post(TodoListController.createTodoList);
-  app.route('/api/todolist/getTodoListByName').get(TodoListController.getTodoListByName);
-  app.route('/api/todolist/updateTodoList').put(TodoListController.updateTodoList);
-  app.route('/api/todolist/deleteTodoList').delete(TodoListController.deleteTodoList);
+  app.route('/api/todolist/getTodoListByName/:name').get(TodoListController.getTodoListByName);
+  app.route('/api/todolist/updateTodoList/:name').put(TodoListController.updateTodoList);
+  app.route('/api/todolist/deleteTodoList/:name').delete(TodoListController.deleteTodoList);
+  //app.route('/api/todolist/deleteItem/:todolistName/:itemName').delete(TodoListController.deleteTodoListItem);
 
   // items routes
 
