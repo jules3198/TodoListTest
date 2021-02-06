@@ -14,10 +14,16 @@ function respond(err, result, res) {
 }
 
 function arrayRemove(arr, value) { 
-    
-    return arr.filter(function(ele){ 
-        return ele != value; 
-    });
+   
+    let array=[];
+   for(el in arr){
+       console.log("ele", el)
+       if(arr[el].toString() != value.toString()){
+           array.push(arr[el].toString());
+       }
+   }
+
+   return array;
 }
 
 
@@ -102,7 +108,41 @@ const TodoListController={
             }
         });
         
+    },
+    deleteTodoListItem:(req,res)=>{
+        let todolistName=req.params.todolistName;
+        let itemName=req.params.itemName;
+        TodoList.findOne({name:todolistName},(err,result_todo)=>{
+            if(result_todo){
+                Item.findOne({name:itemName},(err,result_item)=>{
+                    if(result_item){
+                        let id_item=result_item._id;
+                        console.log("item id", id_item)
+                        console.log("old array", result_todo.items);
+                        const item_array = arrayRemove(result_todo.items,id_item);
+                        console.log("new array", item_array);
+                        newTodoList = {
+                            items: item_array,
+                            name: result_todo.name,
+                            user: result_todo.user
+                        } 
+                        TodoList.findOneAndUpdate({name:todolistName},newTodoList,(err,result)=>{
+                           if(result){
+                                respond(err, {status:"ok", statusCode:200}, res);
+                           }else{
+                            return res.status(400).json({ response: "Can't remove item" });
+                           }
+                        });
+                    }else{
+                        return res.status(400).json({ response: "Item not exist" }); 
+                    }
+                });
+            }else{
+                return res.status(400).json({ response: "Todolist not exist" });
+            }
+        });
     }
+
 }
 
 module.exports=TodoListController;
