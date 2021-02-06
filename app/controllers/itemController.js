@@ -16,9 +16,14 @@ const ItemController={
     },
     
     getItemByName:(req,res)=>{
-        let name=req.body.name
+        let name=req.params.name;
         Item.findOne({name:name},(err,result)=>{
-            respond(err,result,res);
+
+            if(result){
+                respond(err,result,res);
+            }else{
+                return res.status(400).json({ response: "Item not exist" });
+            }
         });
     },
 
@@ -47,7 +52,9 @@ const ItemController={
                                 let list=result1.items
                                 list.push(id);
                                 Todolist.updateOne({name:req.body.todoListName},{items:list},(err,result2)=>{
-                                    respond(err,result2,res);
+                                   if(result2){
+                                    respond(err,{status:"ok", statusCode:200},res);
+                                   }
                                 });
                             }
                         });  
@@ -59,17 +66,48 @@ const ItemController={
                
         })  
     }else{
-        res.send("can't create item")
+        res.status(400).send("can't create item")
     }
        
     },
     
     updateItem:async (req,res)=>{
-       let resp= await ItemValidator(req.body.todoListName);
-       res.send(`result ${resp}`);
-    },
-    deleteItem:()=>{
+        let name=req.params.name;
+        Item.findOne({name:name},(err,result)=>{
 
+            if(result){
+               let item={
+                   name: req.body.name? req.body.name: result.name,
+                   content: req.body.content? req.body.content: result.content,
+               }
+               Item.findOneAndUpdate({name:name},item,(err,result_item)=>{
+                    if(result_item){
+                        respond(err,{status:"ok", statusCode:200},res);
+                    }else{
+                        return res.status(400).json({ response: "Can't update Item" });
+                    }
+               });
+            }else{
+                return res.status(400).json({ response: "Item not exist" });
+            }
+        });
+    },
+    deleteItem:(req,res)=>{
+        let name=req.params.name;
+        Item.findOne({name:name},(err,result)=>{
+
+            if(result){
+                Item.findOneAndDelete({name:name},(err,result_delete)=>{
+                    if(result_delete){
+                        respond(err,{status:"ok", statusCode:200},res);
+                    }else{
+                        return res.status(400).json({ response: "Can't delete Item" });
+                    }
+                })
+            }else{
+                return res.status(400).json({ response: "Item not exist" });
+            }
+        });
     }
 }
 

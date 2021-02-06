@@ -25,9 +25,9 @@ module.exports = (app) => {
 
   app.route('/api/item/listItem').get(ItemController.getAllItem);
   app.route('/api/item/addItem').post(ItemController.createItem);
-  app.route('/api/item/getItemByName').get(ItemController.getItemByName);
-  app.route('/api/item/updateItem').put(ItemController.updateItem);
-  app.route('/api/item/deleteItem').delete(ItemController.deleteItem);
+  app.route('/api/item/getItemByName/:name').get(ItemController.getItemByName);
+  app.route('/api/item/updateItem/:name').put(ItemController.updateItem);
+  app.route('/api/item/deleteItem/:name').delete(ItemController.deleteItem);
 
   app.use((req, res) => { // Middleware pour capturer une requête qui ne match aucune des routes définies plus tôt
     res.status(404).json({url: req.originalUrl, error: 'not found'});

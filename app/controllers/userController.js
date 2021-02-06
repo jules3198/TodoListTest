@@ -30,7 +30,12 @@ const UserController={
     getUserByEmail:(req,res)=>{
         let email=req.body.email
         User.findOne({email:email},(err,result)=>{
-            respond(err,result,res);
+            if(result){
+                respond(err,result,res);
+            }else{
+                return res.status(400).json({ email: "Email already exists" });
+            }
+            
         });
     },
     createUser:(req,res)=>{

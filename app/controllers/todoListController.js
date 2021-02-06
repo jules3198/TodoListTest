@@ -40,10 +40,10 @@ const TodoListController={
     getTodoListByName:(req,res)=>{
         let name=req.params.name
         TodoList.findOne({name:name},(err,result)=>{
-            if(err){
-                return res.status(400).json({ response: "Todolist not exist" });
-            }else{
+            if(result){
                 respond(err,result,res);
+            }else{
+                return res.status(400).json({ response: "Todolist not exist" });
             }
         });
     },
@@ -65,7 +65,7 @@ const TodoListController={
         })      
            
        }else{
-           res.send("not valid")
+        return res.status(400).json({ response: "can't add todolist" });
         }
     },
     updateTodoList: async (req,res)=>{
