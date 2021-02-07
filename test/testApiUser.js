@@ -6,7 +6,6 @@ const chai = require("chai");
 const res = require("express");
 const expect = chai.expect;
 
-
 describe('GET /users', function () {
     it('returns list of all users', function (done) {
         request(app)
@@ -22,7 +21,7 @@ describe('GET /users', function () {
             });
     });
 });
-/*
+
 describe('POST /addUser', function () {
 
     let user = {
@@ -122,7 +121,7 @@ describe('POST /addUser', function () {
             });
     });
 })
-*/
+
 describe('GET /getUserByMail', function () {
     it('retrieve the current user according to his e-mail', function (done) {
         request(app)
