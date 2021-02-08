@@ -84,7 +84,7 @@ describe('GET /getTodoListByName', function () {
     });
 });
 
-/*describe('delete /deleteTodolist', function () {
+describe('delete /deleteTodolist', function () {
     it('remove the current todolist according to his name', function (done) {
         request(app)
             .delete('/api/todolist/deleteTodoList/TestTodoList')
@@ -121,7 +121,7 @@ describe('no delete /deleteTodolist', function () {
             });
     });
 });
-*/
+
 describe('PUT /updateTodolist', function () {
 
     it('modify the current todolist user according to his name', function (done) {
