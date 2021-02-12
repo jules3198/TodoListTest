@@ -9,7 +9,7 @@ function checkMinutes(d){
     let diff=(d1-d2)/1000;
     diff /= 60;
     let response=Math.abs(Math.round(diff));
-    return response>1?true:false;
+    return response>30?true:false;
 }
 
 function validateItemCreation(todolistname,email){
