@@ -5,27 +5,10 @@ const chai = require("chai");
 const res = require("express");
 const expect = chai.expect;
 
-describe('GET /todoList', function () {
-    it('returns list of all todoList', function (done) {
-        request(app)
-            .get('/api/todolist/listTodoList')
-            .set('Accept', 'application/json')
-            .end((err, res) => {
-                console.log("result json array object",res.body)
-                expect('Content-Type', /json/)
-                let result = res.body;
-                expect(result).to.be.an('array')
-                expect(res.statusCode).to.be.equal(200)
-                done();
-            });
-    });
-});
-
-
 let todolist = {
 
     "name" : "TodolistOfGuillaume",
-    "email": "gwelle@myges.fr"
+    "email": "jules31@gmail.fr"
 }
 
 describe('POST /addTodoList', function () {
@@ -37,7 +20,7 @@ describe('POST /addTodoList', function () {
             .set('Accept', 'application/json')
             .end((err, res) => {
                 if (err) return done(err);
-                console.log("result",res.body)
+                console.log("###################################",res)
                 let result = res.body;
                 expect(result.status).to.be.equal('ok')
                 expect('Content-Type', /json/)
@@ -63,10 +46,29 @@ describe('POST /addTodoList', function () {
     });
 });
 
+describe('GET /TestTodoList', function () {
+    it('returns list of all todoList', function (done) {
+        request(app)
+            .get('/api/todolist/listTodoList')
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                console.log("result json array object",res.body)
+                expect('Content-Type', /json/)
+                let result = res.body;
+                expect(result).to.be.an('array')
+                expect(res.statusCode).to.be.equal(200)
+                done();
+            });
+    });
+});
+
+
+
+
 describe('GET /getTodoListByName', function () {
     it('retrieve the current todolist according to his name', function (done) {
         request(app)
-            .get('/api/todolist/getTodoListByName/TestTodoList')
+            .get('/api/todolist/getTodoListByName/TodolistOfGuillaume')
             /*.send({
                 "name" : "TodolistOfGuillaume"
             })*/
@@ -84,44 +86,6 @@ describe('GET /getTodoListByName', function () {
     });
 });
 
-describe('delete /deleteTodolist', function () {
-    it('remove the current todolist according to his name', function (done) {
-        request(app)
-            .delete('/api/todolist/deleteTodoList/TestTodoList')
-            .set('Accept', 'application/json')
-            .end((err, res) => {
-                if (err) return done(err);
-                console.log("suppression",res.body)
-                let result = res.body;
-                //expect(result.status).to.be.equal('ok',"this is ok response from the server")
-                expect(result.status).to.be.equal("ok","this is ok response from the server")
-                expect('Content-Type', /json/)
-                expect(res.statusCode).to.be.equal(200,"todolist removed")
-
-                done();
-            });
-    });
-});
-
-describe('no delete /deleteTodolist', function () {
-    it('no remove the current todolist according to his name', function (done) {
-        request(app)
-            .delete('/api/todolist/deleteTodoList/TestTodoListe')
-            .set('Accept', 'application/json')
-            .end((err, res) => {
-                if (err) return done(err);
-                console.log("result no suppression",res.body)
-                let result = res.body;
-                //expect(result.status).to.be.equal('ok',"this is ok response from the server")
-                expect(result.response).to.be.equal("Todolist not exist")
-                expect('Content-Type', /json/)
-                expect(res.statusCode).to.be.equal(400,"status code valid")
-
-                done();
-            });
-    });
-});
-
 describe('PUT /updateTodolist', function () {
 
     it('modify the current todolist user according to his name', function (done) {
@@ -129,7 +93,7 @@ describe('PUT /updateTodolist', function () {
             .put('/api/todolist/updateTodoList/TodolistOfGuillaume')
             .send({
 
-                "name":"test1"
+                "name":"TodolistOfESGI"
             })
             .set('Accept', 'application/json')
             .end((err, res) => {
@@ -167,3 +131,43 @@ describe('PUT /no updateTodolist', function () {
             });
     });
 });
+
+describe('delete /deleteTodolist', function () {
+    it('remove the current todolist according to his name', function (done) {
+        request(app)
+            .delete('/api/todolist/deleteTodoList/TodolistOfESGI')
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+                console.log("suppression",res.body)
+                let result = res.body;
+                //expect(result.status).to.be.equal('ok',"this is ok response from the server")
+                expect(result.status).to.be.equal("ok","this is ok response from the server")
+                expect('Content-Type', /json/)
+                expect(res.statusCode).to.be.equal(200,"todolist removed")
+
+                done();
+            });
+    });
+});
+
+describe('no delete /deleteTodolist', function () {
+    it('no remove the current todolist according to his name', function (done) {
+        request(app)
+            .delete('/api/todolist/deleteTodoList/TodolistOfESGI')
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+                console.log("result no suppression",res.body)
+                let result = res.body;
+                //expect(result.status).to.be.equal('ok',"this is ok response from the server")
+                expect(result.response).to.be.equal("Todolist not exist")
+                expect('Content-Type', /json/)
+                expect(res.statusCode).to.be.equal(400,"status code valid")
+
+                done();
+            });
+    });
+});
+
+

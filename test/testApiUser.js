@@ -6,21 +6,7 @@ const chai = require("chai");
 const res = require("express");
 const expect = chai.expect;
 
-describe('GET /users', function () {
-    it('returns list of all users', function (done) {
-        request(app)
-            .get('/api/user/listUser')
-            .set('Accept', 'application/json')
-            .end((err, res) => {
-                console.log("result json object",res.body)
-                expect('Content-Type', /json/)
-                let result = res.body;
-                expect(result).to.be.an('array')
-                expect(res.statusCode).to.be.equal(200)
-                done();
-            });
-    });
-});
+
 
 describe('POST /addUser', function () {
 
@@ -122,12 +108,28 @@ describe('POST /addUser', function () {
     });
 })
 
+describe('GET /users', function () {
+    it('returns list of all users', function (done) {
+        request(app)
+            .get('/api/user/listUser')
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                console.log("result json object",res.body)
+                expect('Content-Type', /json/)
+                let result = res.body;
+                expect(result).to.be.an('array')
+                expect(res.statusCode).to.be.equal(200)
+                done();
+            });
+    });
+});
+
 describe('GET /getUserByMail', function () {
     it('retrieve the current user according to his e-mail', function (done) {
         request(app)
             .get('/api/user/getUserByMail')
             .send({
-                "email" : "benji.fr@ges.com"
+                "email" : "bbg@cluster.fr"
             })
             .set('Accept', 'application/json')
             .end((err, res) => {
@@ -148,14 +150,14 @@ describe('GET /getUserByMail', function () {
         "lastName": "BOURNE",
         "firstName": "Evan",
         "birthDate": "01-04-1992",
-        "email": "gwelle.civ@ges.fr",
+        "email": "guillaume@gmail.com",
         "password": "Lucamos93$",
     }
 
     describe('PUT /updateUser', function () {
         it('modify the current user according to his e-mail', function (done) {
             request(app)
-                .put('/api/user/updateUser/gwelle.civ@ges.fr')
+                .put('/api/user/updateUser/bbg@cluster.fr')
                 .send(currentUser)
                 .set('Accept', 'application/json')
                 .end((err, res) => {
@@ -174,7 +176,7 @@ describe('GET /getUserByMail', function () {
 describe('delete /deleteUser', function () {
     it('remove the current user according to his e-mail', function (done) {
         request(app)
-            .delete('/api/user/deleteUser/guillaume.welle@gmail.com')
+            .delete('/api/user/deleteUser/guillaume@gmail.com')
             /*.send({
                 "email" : "guillaume@gmail.com"
             })*/
